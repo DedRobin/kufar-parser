@@ -1,4 +1,5 @@
 import requests
+import csv
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
@@ -20,9 +21,18 @@ def get_html(url):
         class_name = "styles_wrapper__IMYdY"
         products = driver.find_elements(By.CLASS_NAME, class_name)
 
-        links = []
-        images = []
+        names, prices, links, images, dates = [], [], [], [], []
+
         for p in products:
+            name = p.find_element(By.CLASS_NAME, "styles_title__XS_QS")
+            name = name.text
+            names.append(name)
+
+            price = p.find_element(By.XPATH,
+                                   '//*[@id="main-content"]/div[6]/div[1]/div/div[2]/div[2]/div/div/section[1]/a/div[2]/div[1]/div[1]/p/span[1]')
+            price = price.text
+            prices.append(price)
+
             link = p.get_attribute("href")
             links.append(link)
 
@@ -30,7 +40,18 @@ def get_html(url):
             src = image.get_attribute("data-src")
             images.append(src)
 
-        time.sleep(10)
+            date = p.find_element(By.CLASS_NAME, 'styles_secondary__dylmH')
+            date = date.find_element(By.TAG_NAME, "span")
+            date = date.text
+            dates.append(date)
+
+        with open("data.csv", "w") as f:
+            writer = csv.writer(f)
+            data = list(zip(names, prices, links, images, dates))
+            # for row in data:
+            writer.writerows(data)
+            # f.write("\n".join(",".join(row) for row in data))
+
     except Exception as _ex:
         print(_ex)
     finally:
