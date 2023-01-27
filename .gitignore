@@ -1,4 +1,5 @@
 .idea
+.env
 kufar-parser-venv
-kufar/images
-kufar/data.csv
+parsers/images
+parsers/data.csv

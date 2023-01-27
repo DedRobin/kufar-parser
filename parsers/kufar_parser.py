@@ -7,7 +7,7 @@ import time
 from selenium.webdriver.common.by import By
 
 
-def get_html(url):
+def parse_kufar(url):
     driver = webdriver.Chrome()
     driver.maximize_window()
     # try:
@@ -38,7 +38,7 @@ def get_html(url):
 
         image = p.find_element(By.CLASS_NAME, "styles_image__CTXvl")
         src = image.get_attribute("src")
-        with open(f"images/image-{num}.png", "wb") as f:
+        with open(f"parsers/images/image-{num}.png", "wb") as f:
             f.write(image.screenshot_as_png)
         images.append(src)
 
@@ -47,7 +47,7 @@ def get_html(url):
         date = date.text
         dates.append(date)
 
-    with open("data.csv", "w") as f:
+    with open("parsers/data.csv", "w") as f:
         writer = csv.writer(f)
         data = list(zip(names, prices, links, images, dates))
         # for row in data:
@@ -61,11 +61,3 @@ def get_html(url):
     # finally:
     driver.close()
     driver.quit()
-
-
-def main():
-    get_html(url="https://www.kufar.by/l/r~minsk/noutbuki/nb~apple?cmp=0&cnd=1&sort=lst.d")
-
-
-if __name__ == "__main__":
-    main()
