@@ -1,9 +1,4 @@
-import requests
-import csv
-from bs4 import BeautifulSoup
 from selenium import webdriver
-import time
-
 from selenium.webdriver.common.by import By
 
 
@@ -38,8 +33,6 @@ def parse_kufar(url: str) -> list:
 
         image = p.find_element(By.CLASS_NAME, "styles_image__CTXvl")
         src = image.get_attribute("src")
-        # with open(f"parsers/images/image-{num}.png", "wb") as f:
-        #     f.write(image.screenshot_as_png)
         images.append(src)
 
         date = p.find_element(By.CLASS_NAME, 'styles_secondary__dylmH')
@@ -47,19 +40,8 @@ def parse_kufar(url: str) -> list:
         date = date.text
         dates.append(date)
 
-    # with open("parsers/data.csv", "w") as f:
-    #     writer = csv.writer(f)
-    # data = list(zip(names, prices, links, images, dates))
-    data = list(zip(names, prices, dates))
-    #     # for row in data:
-    #     header = ("name", "price", "link", "src", "date")
-    #     writer.writerow(header)
-    #     writer.writerows(data)
-        # f.write("\n".join(",".join(row) for row in data))
+    data = list(zip(names, prices, dates, images))
 
-    # except Exception as _ex:
-    #     print(_ex)
-    # finally:
     driver.close()
     driver.quit()
     return data

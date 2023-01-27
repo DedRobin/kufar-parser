@@ -29,7 +29,16 @@ async def caps(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_products(update: Update, context: ContextTypes.DEFAULT_TYPE):
     products = parse_kufar(KUFAR_URL)
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=products)
+    products = [", ".join(p) for p in products[:-1]]
+
+    # file = open("image.png", "rb")
+
+    for product in products:
+        await context.bot.send_photo(
+            chat_id=update.effective_chat.id,
+            # photo=
+            )
+        # await context.bot.send_message(chat_id=update.effective_chat.id, text=product)
 
 
 if __name__ == '__main__':
@@ -43,6 +52,6 @@ if __name__ == '__main__':
     application.add_handler(start_handler)
     application.add_handler(echo_handler)
     application.add_handler(caps_handler)
-    application.add_handler(get_products_handler)
+    # application.add_handler(get_products_handler)
 
     application.run_polling()
