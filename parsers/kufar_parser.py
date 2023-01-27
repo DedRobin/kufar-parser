@@ -7,7 +7,7 @@ import time
 from selenium.webdriver.common.by import By
 
 
-def parse_kufar(url):
+def parse_kufar(url: str) -> list:
     driver = webdriver.Chrome()
     driver.maximize_window()
     # try:
@@ -38,8 +38,8 @@ def parse_kufar(url):
 
         image = p.find_element(By.CLASS_NAME, "styles_image__CTXvl")
         src = image.get_attribute("src")
-        with open(f"parsers/images/image-{num}.png", "wb") as f:
-            f.write(image.screenshot_as_png)
+        # with open(f"parsers/images/image-{num}.png", "wb") as f:
+        #     f.write(image.screenshot_as_png)
         images.append(src)
 
         date = p.find_element(By.CLASS_NAME, 'styles_secondary__dylmH')
@@ -47,13 +47,14 @@ def parse_kufar(url):
         date = date.text
         dates.append(date)
 
-    with open("parsers/data.csv", "w") as f:
-        writer = csv.writer(f)
-        data = list(zip(names, prices, links, images, dates))
-        # for row in data:
-        header = ("name", "price", "link", "src", "date")
-        writer.writerow(header)
-        writer.writerows(data)
+    # with open("parsers/data.csv", "w") as f:
+    #     writer = csv.writer(f)
+    # data = list(zip(names, prices, links, images, dates))
+    data = list(zip(names, prices, dates))
+    #     # for row in data:
+    #     header = ("name", "price", "link", "src", "date")
+    #     writer.writerow(header)
+    #     writer.writerows(data)
         # f.write("\n".join(",".join(row) for row in data))
 
     # except Exception as _ex:
@@ -61,3 +62,4 @@ def parse_kufar(url):
     # finally:
     driver.close()
     driver.quit()
+    return data
