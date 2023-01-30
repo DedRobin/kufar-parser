@@ -29,7 +29,7 @@ async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info("{0} {1} used command '/{2}'".format(first_name, last_name, command))
     products = parse_kufar()
 
-    for product in products[:1]:
+    for product in products:
         await context.bot.send_photo(
             chat_id=update.effective_chat.id,
             photo=product[-1],
