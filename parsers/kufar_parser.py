@@ -1,10 +1,12 @@
-import time
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from io import BytesIO
 
-def parse_kufar(url: str) -> list:
+KUFAR_URL = os.environ.get("KUFAR_URL", None)
+
+
+def parse_kufar(url: str = KUFAR_URL) -> list:
     # Options
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -13,12 +15,6 @@ def parse_kufar(url: str) -> list:
     # Open browser
     driver = webdriver.Chrome(options=chrome_options)
     driver.get(url=url)
-
-    # css_selector = "#__next > div.styles_wrapper__YA4CR > div > div.styles_buttons__H6b2h > button"
-    # button = driver.find_element(By.CSS_SELECTOR, css_selector)
-    # button.click()
-
-    # time.sleep(10)
     class_name = "styles_wrapper__IMYdY"
     products = driver.find_elements(By.CLASS_NAME, class_name)[:5]
 
@@ -38,7 +34,7 @@ def parse_kufar(url: str) -> list:
         links.append(link)
 
         image = p.find_element(By.CLASS_NAME, "styles_image__CTXvl")
-        src = image.get_attribute("src")
+        src = image.get_attribute("data-src")
         images.append(src)
 
         date = p.find_element(By.CLASS_NAME, 'styles_secondary__dylmH')
