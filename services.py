@@ -1,6 +1,6 @@
 import inspect
 import logging
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 from telegram.ext import ContextTypes
 from parsers.kufar_parser import parse_kufar
 
@@ -10,15 +10,23 @@ logging.basicConfig(
     level=logging.INFO
 )
 
+reply_keyboard = [
+    ["Получить объявления"],
+]
+markup = ReplyKeyboardMarkup(reply_keyboard)
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [
-        [InlineKeyboardButton("Получить последние объявления", callback_data='1'),
-         ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    # keyboard = [
+    #     [InlineKeyboardButton("Получить последние объявления", callback_data='1'),
+    #      ]
+    # ]
+    first_name = update.effective_chat.first_name
+    last_name = update.effective_chat.last_name
+    command = inspect.currentframe().f_code.co_name
 
-    await update.message.reply_text('Выберите действие:', reply_markup=reply_markup)
+    logger.info("{0} {1} used command '/{2}'".format(first_name, last_name, command))
+    await update.message.reply_text('Выберите действие:', reply_markup=markup)
 
 
 async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
