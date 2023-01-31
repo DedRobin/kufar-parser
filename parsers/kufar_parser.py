@@ -2,11 +2,12 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
 
-KUFAR_URL = os.environ.get("KUFAR_URL", None)
+URL = "https://www.kufar.by/l/r~minsk/noutbuki/nb~apple?cmp=0&cnd=1&sort=lst.d"
 
 
-def parse_kufar(url: str = KUFAR_URL) -> list:
+def parse_kufar(url: str = URL) -> list:
     # Options
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -16,7 +17,7 @@ def parse_kufar(url: str = KUFAR_URL) -> list:
     driver = webdriver.Chrome(options=chrome_options)
     driver.get(url=url)
     class_name = "styles_wrapper__IMYdY"
-    products = driver.find_elements(By.CLASS_NAME, class_name)[:5]
+    products = driver.find_elements(By.CLASS_NAME, class_name)  # [:5]
 
     names, prices, links, images, dates = [], [], [], [], []
 
@@ -33,7 +34,15 @@ def parse_kufar(url: str = KUFAR_URL) -> list:
         link = p.get_attribute("href")
         links.append(link)
 
-        image = p.find_element(By.CLASS_NAME, "styles_image__CTXvl")
+        try:
+            image = p.find_element(By.CLASS_NAME, "styles_image__CTXvl")
+        except NoSuchElementException as _ex:
+            print(_ex)
+        finally:
+            image = p.find_element(By.XPATH,
+                                   '//*[@id="Combined-Shape"]')
+            src = image.text
+
         src = image.get_attribute("data-src")
         images.append(src)
 
