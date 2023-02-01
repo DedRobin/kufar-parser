@@ -36,14 +36,10 @@ def parse_kufar(url: str = URL) -> list:
 
         try:
             image = p.find_element(By.CLASS_NAME, "styles_image__CTXvl")
-        except NoSuchElementException as _ex:
-            print(_ex)
-        finally:
-            image = p.find_element(By.XPATH,
-                                   '//*[@id="Combined-Shape"]')
-            src = image.text
+            src = image.get_attribute("data-src")
+        except NoSuchElementException:
+            src = "static/images/no-image.jpg"
 
-        src = image.get_attribute("data-src")
         images.append(src)
 
         date = p.find_element(By.CLASS_NAME, 'styles_secondary__dylmH')
