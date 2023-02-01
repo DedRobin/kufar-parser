@@ -17,7 +17,7 @@ def parse_kufar(url: str = URL) -> list:
     driver = webdriver.Chrome(options=chrome_options)
     driver.get(url=url)
     class_name = "styles_wrapper__IMYdY"
-    products = driver.find_elements(By.CLASS_NAME, class_name)  # [:5]
+    products = driver.find_elements(By.TAG_NAME, "section")  # [:5]
 
     names, prices, links, images, dates = [], [], [], [], []
 
@@ -26,12 +26,14 @@ def parse_kufar(url: str = URL) -> list:
         name = name.text
         names.append(name)
 
-        price = p.find_element(By.XPATH,
-                               '//*[@id="main-content"]/div[6]/div/div/div[2]/div[2]/div/div/section[1]/a/div[2]/div[1]/div[1]/p/span[1]')
+        price = p.find_element(By.CLASS_NAME,
+                               'styles_price__tiO8k')
+        price = price.find_element(By.TAG_NAME, "span")
         price = price.text
         prices.append(price)
 
-        link = p.get_attribute("href")
+        link = p.find_element(By.CLASS_NAME, 'styles_wrapper__IMYdY')
+        link = link.get_attribute("href")
         links.append(link)
 
         try:
