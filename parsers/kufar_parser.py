@@ -1,9 +1,10 @@
+import csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
 from parsers.tools import get_product_name, get_product_price, get_product_link, get_product_image, get_post_date, \
-    get_page
+    get_page, check_in_cache, get_cache
 
 URL = "https://www.kufar.by/l/r~minsk/noutbuki/nb~apple?cmp=0&cnd=1&sort=lst.d"
 
@@ -26,25 +27,40 @@ def parse_kufar(url: str = URL) -> list:
     # Signal
     run_loop = True
 
+    # Cache
+    # try:
+    #     cache = open("cache.csv", "r")
+    # except FileNotFoundError:
+    cache = get_cache()
+
+    # Run loop
     while run_loop:
+
         products_from_page = get_page(driver)
 
         names, prices, links, images, dates = [], [], [], [], []
 
         for num, product in enumerate(products_from_page, 1):
             date = get_post_date(product)
-            dates.append(date)
-
-            name = get_product_name(product)
-            names.append(name)
-
-            price = get_product_price(product)
-            prices.append(price)
+            if not date:
+                run_loop = False
+                break
 
             link = get_product_link(product)
-            links.append(link)
+            is_existed = check_in_cache(cache, link)  # Checking a file in the cache
+            if is_existed:
+                continue
+
+            name = get_product_name(product)
+
+            price = get_product_price(product)
 
             src_image = get_product_image(product)
+
+            dates.append(date)
+            links.append(link)
+            names.append(name)
+            prices.append(price)
             images.append(src_image)
 
         product_list = list(zip(links, names, prices, dates, images))
@@ -59,7 +75,8 @@ def parse_kufar(url: str = URL) -> list:
             next_url = last_element.get_attribute("href")
             driver.get(url=next_url)
 
-    # Closing browser
+    # Closing cachefile and browser
+    cache.close()
     driver.close()
     driver.quit()
     return products
