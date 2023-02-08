@@ -7,11 +7,18 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
 
 MONTHS = {
-    "янв.": 1, "февр.": 2,  # Winter
-    "март.": 3, "апр.": 4, "мая": 5,  # Spring
-    "июн.": 6, "июл.": 7, "аг.": 8,  # Summer
-    "сент.": 9, "окт.": 10, "нояб.": 11,  # Autumn
-    "дек.": 12  # Winter
+    "янв.": 1,
+    "февр.": 2,  # Winter
+    "март.": 3,
+    "апр.": 4,
+    "мая": 5,  # Spring
+    "июн.": 6,
+    "июл.": 7,
+    "аг.": 8,  # Summer
+    "сент.": 9,
+    "окт.": 10,
+    "нояб.": 11,  # Autumn
+    "дек.": 12,  # Winter
 }
 
 
@@ -27,14 +34,14 @@ def get_product_name(product: WebElement) -> str:
 
 
 def get_product_price(product: WebElement) -> str:
-    price = product.find_element(By.CLASS_NAME, 'styles_price__tiO8k')
+    price = product.find_element(By.CLASS_NAME, "styles_price__tiO8k")
     price = price.find_element(By.TAG_NAME, "span")
     price = price.text
     return price
 
 
 def get_product_link(product: WebElement) -> str:
-    link = product.find_element(By.CLASS_NAME, 'styles_wrapper__IMYdY')
+    link = product.find_element(By.CLASS_NAME, "styles_wrapper__IMYdY")
     link = link.get_attribute("href")
     return link
 
@@ -49,7 +56,7 @@ def get_product_image(product: WebElement) -> str:
 
 
 def get_post_date(product: WebElement) -> str:
-    date = product.find_element(By.CLASS_NAME, 'styles_secondary__dylmH')
+    date = product.find_element(By.CLASS_NAME, "styles_secondary__dylmH")
     date = date.find_element(By.TAG_NAME, "span")
     date = date.text
     date = _convert_datetime(date)
@@ -61,31 +68,33 @@ def _convert_datetime(input_datetime: str) -> str or None:
     date, time = input_datetime.split(",")
 
     if date == "Сегодня":
-        date = datetime_now.strftime('%d.%m.%Y')
+        date = datetime_now.strftime("%d.%m.%Y")
     elif date == "Вчера":
         different = datetime_now - timedelta(days=1)
-        date = different.strftime('%d.%m.%Y')
+        date = different.strftime("%d.%m.%Y")
     else:
         day_str, month_str = date.split()
         month_int = MONTHS[month_str]
-        some_datetime = datetime(year=datetime_now.year, month=month_int, day=int(day_str))
+        some_datetime = datetime(
+            year=datetime_now.year, month=month_int, day=int(day_str)
+        )
         different = datetime_now - some_datetime
         if different.days > 3:
             return None
-        date = some_datetime.strftime('%d.%m.%Y')
+        date = some_datetime.strftime("%d.%m.%Y")
     date = ", ".join([date, time])
     return date
 
 
 def get_cache() -> list:
     try:
-        cache = open('cache.csv', 'r')
+        cache = open("cache.csv", "r")
     except FileNotFoundError:
-        cache = open('cache.csv', 'w')
+        cache = open("cache.csv", "w")
         # writer = csv.writer(cache)
         # writer.writerow(["links"])
         cache.close()
-    cache = open('cache.csv', 'r')
+    cache = open("cache.csv", "r")
     reader = csv.reader(cache)
     data = [row[0] for row in reader]
     return data

@@ -8,8 +8,7 @@ from parsers.kufar_parser import parse_kufar
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
 reply_keyboard = [
@@ -24,7 +23,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     command = inspect.currentframe().f_code.co_name
 
     logger.info("{0} {1} used command '/{2}'".format(first_name, last_name, command))
-    await update.message.reply_text('Бот запущен.', reply_markup=markup)
+    await update.message.reply_text("Бот запущен.", reply_markup=markup)
 
 
 async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -48,8 +47,7 @@ async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
     else:
         await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="Новых объявлений не найдено"
+            chat_id=update.effective_chat.id, text="Новых объявлений не найдено"
         )
     end_time = time.time()
     duration = end_time - start_time
