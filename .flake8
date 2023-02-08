@@ -1,0 +1,12 @@
+[flake8]
+exclude =
+    .env,
+    .git,
+    .idea.
+    .venv,
+    cache.csv,
+    driver,
+    kufar-parser-venv,
+    __pycache__
+max-line-length = 120
+max-complexity = 14
