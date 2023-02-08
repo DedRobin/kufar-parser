@@ -36,8 +36,8 @@ async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     pages = parse_kufar()
     # url = 'https://yams.kufar.by/api/v1/kufar-ads/images/88/8823024759.jpg?rule=list_thumbs_2x'
 
-    for page in pages[:1]:
-        for product in page[:5]:
+    for page in pages:
+        for product in page:
             await context.bot.send_photo(
                 chat_id=update.effective_chat.id,
                 photo=product[-1],

@@ -1,4 +1,5 @@
 import csv
+import re
 from datetime import datetime, timedelta
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
@@ -80,17 +81,28 @@ def get_cache() -> list:
     try:
         cache = open('cache.csv', 'r')
     except FileNotFoundError:
-        cache = open('cache.csv', 'r')
-        writer = csv.writer(cache)
-        writer.writerow(["links"])
+        cache = open('cache.csv', 'w')
+        # writer = csv.writer(cache)
+        # writer.writerow(["links"])
         cache.close()
+    cache = open('cache.csv', 'r')
     reader = csv.reader(cache)
-    data = [row for row in reade
+    data = [row[0] for row in reader]
     return data
 
 
-def check_in_cache(data_from_cache: list, link: str) -> None:
-    if link in data_from_cache:
+def check_in_cache(cache: list, link: str) -> bool:
+    product_id = _get_product_id(link)
+    if product_id not in cache:
         with open("cache.csv", "a") as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(link)
+            writer.writerow([product_id])
+            return False
+    return True
+
+
+def _get_product_id(link: str):
+    match = re.findall(r"/[0-9]+\?", link)
+    if match:
+        link = match[0][1:-1]
+        return link

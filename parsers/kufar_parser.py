@@ -64,7 +64,8 @@ def parse_kufar(url: str = URL) -> list:
             images.append(src_image)
 
         product_list = list(zip(links, names, prices, dates, images))
-        products.append(product_list)
+        if product_list:
+            products.append(product_list)
 
         # Get next page
         next_page = driver.find_elements(By.CLASS_NAME, 'styles_link__KajLs.styles_arrow__fJMcy')
@@ -75,8 +76,7 @@ def parse_kufar(url: str = URL) -> list:
             next_url = last_element.get_attribute("href")
             driver.get(url=next_url)
 
-    # Closing cachefile and browser
-    cache.close()
+    # Closing the browser
     driver.close()
     driver.quit()
     return products
