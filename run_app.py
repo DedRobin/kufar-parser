@@ -1,9 +1,9 @@
 import os
 import sys
 
-from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 
-from services import start, get_updates
+from services import get_updates, start
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
 

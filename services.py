@@ -2,8 +2,9 @@ import inspect
 import logging
 import time
 
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import ContextTypes
+
 from parsers.kufar_parser import parse_kufar
 
 logger = logging.getLogger(__name__)

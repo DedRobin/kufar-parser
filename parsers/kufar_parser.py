@@ -1,16 +1,16 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 from parsers.tools import (
-    get_product_name,
-    get_product_price,
-    get_product_link,
-    get_product_image,
-    get_post_date,
-    get_page,
     check_in_cache,
     get_cache,
+    get_page,
+    get_post_date,
+    get_product_image,
+    get_product_link,
+    get_product_name,
+    get_product_price,
 )
 
 URL = "https://www.kufar.by/l/r~minsk/noutbuki/nb~apple?cmp=0&cnd=1&sort=lst.d"
