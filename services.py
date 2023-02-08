@@ -1,5 +1,6 @@
 import inspect
 import logging
+import time
 
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ContextTypes
@@ -27,6 +28,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    start_time = time.time()
+
     first_name = update.effective_chat.first_name
     last_name = update.effective_chat.last_name
     command = inspect.currentframe().f_code.co_name
@@ -35,11 +38,19 @@ async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     pages = parse_kufar()
     # url = 'https://yams.kufar.by/api/v1/kufar-ads/images/88/8823024759.jpg?rule=list_thumbs_2x'
-
-    for page in pages:
-        for product in page:
-            await context.bot.send_photo(
-                chat_id=update.effective_chat.id,
-                photo=product[-1],
-                caption="\n".join(product[:-1]),
-            )
+    if pages:
+        for page in pages:
+            for product in page:
+                await context.bot.send_photo(
+                    chat_id=update.effective_chat.id,
+                    photo=product[-1],
+                    caption="\n".join(product[:-1]),
+                )
+    else:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Новых объявлений не найдено"
+        )
+    end_time = time.time()
+    duration = end_time - start_time
+    logger.info(f"The command '/{command}' is completed (duration = {duration})")

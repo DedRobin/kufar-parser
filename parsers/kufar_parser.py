@@ -1,4 +1,3 @@
-import csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -27,10 +26,6 @@ def parse_kufar(url: str = URL) -> list:
     # Signal
     run_loop = True
 
-    # Cache
-    # try:
-    #     cache = open("cache.csv", "r")
-    # except FileNotFoundError:
     cache = get_cache()
 
     # Run loop
