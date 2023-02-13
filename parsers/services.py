@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from settings import DAYS_AGO
+from settings import DAYS_AGO, LIMIT_OF_RECORDS
 
 MONTHS = {
     "янв.": 1,
@@ -93,11 +93,9 @@ def _convert_datetime(input_datetime: str) -> str or None:
 
 def get_cache() -> list:
     try:
-        cache = open("cache.csv", "r")
+        open("cache.csv", "r")
     except FileNotFoundError:
         cache = open("cache.csv", "w")
-        # writer = csv.writer(cache)
-        # writer.writerow(["links"])
         cache.close()
     cache = open("cache.csv", "r")
     reader = csv.reader(cache)
@@ -120,3 +118,16 @@ def _get_product_id(link: str):
     if match:
         link = match[0][1:-1]
         return link
+
+
+def check_cache_size():
+    with open("cache.csv", "r") as cache:
+        reader = csv.reader(cache)
+        data = [row[0] for row in reader]
+        size = len(data)
+    if size > LIMIT_OF_RECORDS:
+        with open("cache.csv", "w") as cache:
+            writer = csv.writer(cache)
+            data = data[:LIMIT_OF_RECORDS]
+            for row in data:
+                writer.writerow([row])

@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-from parsers.tools import (
+from parsers.services import (
     check_in_cache,
     get_cache,
     get_page,
@@ -11,6 +11,7 @@ from parsers.tools import (
     get_product_link,
     get_product_name,
     get_product_price,
+    check_cache_size,
 )
 
 
@@ -49,6 +50,7 @@ def parse_kufar(url: str) -> list:
                 # Closing the browser
                 driver.close()
                 driver.quit()
+                check_cache_size()
                 return products
 
             link = get_product_link(product)
@@ -83,4 +85,5 @@ def parse_kufar(url: str) -> list:
     # Closing the browser
     driver.close()
     driver.quit()
+    check_cache_size()
     return products
