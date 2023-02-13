@@ -13,10 +13,8 @@ from parsers.tools import (
     get_product_price,
 )
 
-URL = "https://www.kufar.by/l/r~minsk/noutbuki/nb~apple?cmp=0&cnd=1&sort=lst.d"
 
-
-def parse_kufar(url: str = URL) -> list:
+def parse_kufar(url: str) -> list:
     products = []
 
     # Options
@@ -42,21 +40,23 @@ def parse_kufar(url: str = URL) -> list:
 
         names, prices, links, images, dates = [], [], [], [], []
 
-        for num, product in enumerate(products_from_page, 1):
+        for product in products_from_page:
             date = get_post_date(product)
             if not date:
-                run_loop = False
-                break
+                product_list = list(zip(links, names, prices, dates, images))
+                if product_list:
+                    products.append(product_list)
+                # Closing the browser
+                driver.close()
+                driver.quit()
+                return products
 
             link = get_product_link(product)
             is_existed = check_in_cache(cache, link)  # Checking a file in the cache
             if is_existed:
                 continue
-
             name = get_product_name(product)
-
             price = get_product_price(product)
-
             src_image = get_product_image(product)
 
             dates.append(date)
@@ -73,11 +73,11 @@ def parse_kufar(url: str = URL) -> list:
         next_page = driver.find_elements(
             By.CLASS_NAME, "styles_link__KajLs.styles_arrow__fJMcy"
         )
-        last_element = next_page[-1]
-        if last_element.tag_name != "a":
+        last_child = next_page[-1]
+        if last_child.tag_name != "a":
             run_loop = False
         else:
-            next_url = last_element.get_attribute("href")
+            next_url = last_child.get_attribute("href")
             driver.get(url=next_url)
 
     # Closing the browser

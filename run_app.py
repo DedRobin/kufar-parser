@@ -1,11 +1,9 @@
-import os
 import sys
 
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 
-from services import get_updates, start
-
-BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
+from bots.services import get_updates, start
+from settings import BOT_TOKEN
 
 if __name__ == "__main__":
     print("cmd entry:", sys.argv)

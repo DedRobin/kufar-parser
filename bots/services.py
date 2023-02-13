@@ -5,6 +5,7 @@ import time
 from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
+from settings import URL
 from parsers.kufar_parser import parse_kufar
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ async def get_updates(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     logger.info("{0} {1} used command '/{2}'".format(first_name, last_name, command))
 
-    pages = parse_kufar()
+    pages = parse_kufar(url=URL)
     # url = 'https://yams.kufar.by/api/v1/kufar-ads/images/88/8823024759.jpg?rule=list_thumbs_2x'
     if pages:
         for page in pages:

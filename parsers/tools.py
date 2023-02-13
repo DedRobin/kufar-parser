@@ -1,25 +1,25 @@
 import csv
 import re
 from datetime import datetime, timedelta
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
+from settings import DAYS_AGO
 MONTHS = {
     "янв.": 1,
-    "февр.": 2,  # Winter
+    "февр.": 2,
     "март.": 3,
     "апр.": 4,
-    "мая": 5,  # Spring
+    "мая": 5,
     "июн.": 6,
     "июл.": 7,
-    "аг.": 8,  # Summer
+    "авг.": 8,
     "сент.": 9,
     "окт.": 10,
-    "нояб.": 11,  # Autumn
-    "дек.": 12,  # Winter
+    "нояб.": 11,
+    "дек.": 12,
 }
 
 
@@ -71,18 +71,20 @@ def _convert_datetime(input_datetime: str) -> str or None:
     if date == "Сегодня":
         date = datetime_now.strftime("%d.%m.%Y")
     elif date == "Вчера":
+        if DAYS_AGO < 2:
+            return None
         different = datetime_now - timedelta(days=1)
         date = different.strftime("%d.%m.%Y")
     else:
         day_str, month_str = date.split()
         month_int = MONTHS[month_str]
-        some_datetime = datetime(
+        current_datetime = datetime(
             year=datetime_now.year, month=month_int, day=int(day_str)
         )
-        different = datetime_now - some_datetime
-        if different.days > 3:
+        different = datetime_now - current_datetime
+        if different.days >= DAYS_AGO:
             return None
-        date = some_datetime.strftime("%d.%m.%Y")
+        date = current_datetime.strftime("%d.%m.%Y")
     date = ", ".join([date, time])
     return date
 
