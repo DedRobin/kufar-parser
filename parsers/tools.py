@@ -1,12 +1,14 @@
 import csv
 import re
 from datetime import datetime, timedelta
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from settings import DAYS_AGO
+
 MONTHS = {
     "янв.": 1,
     "февр.": 2,
