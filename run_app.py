@@ -6,7 +6,14 @@ from bots.services import get_updates, start
 from settings import BOT_TOKEN
 
 if __name__ == "__main__":
-    print("cmd entry:", sys.argv)
+    try:
+        arg = sys.argv[1]
+    except IndexError:
+        pass
+    else:
+        if arg == "clear_cache":
+            with open("cache.csv", "w") as cache:
+                print("Cache has been clear")
 
     application = ApplicationBuilder().token(BOT_TOKEN).build()
 
