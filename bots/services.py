@@ -1,17 +1,11 @@
 import inspect
-import logging
 import time
 
 from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
 from parsers.kufar_parser import parse_kufar
-from settings import URL
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+from settings import URL, logger
 
 reply_keyboard = [
     ["Получить объявления"],

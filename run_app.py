@@ -3,7 +3,7 @@ import sys
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 
 from bots.services import get_updates, start
-from settings import BOT_TOKEN
+from settings import BOT_TOKEN, logger
 
 if __name__ == "__main__":
     try:
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     else:
         if arg == "clear_cache":
             with open("cache.csv", "w") as cache:
-                print("Cache has been clear")
+                logger.info("Cache has been clear")
 
     application = ApplicationBuilder().token(BOT_TOKEN).build()
 
