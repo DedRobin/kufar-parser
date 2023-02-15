@@ -1,4 +1,4 @@
-import sys
+import sys, os
 
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 
@@ -12,8 +12,8 @@ if __name__ == "__main__":
         pass
     else:
         if arg == "clear_cache":
-            with open("cache.csv", "w") as cache:
-                logger.info("Cache has been clear")
+            os.remove("cache.txt")
+            logger.info("Cache has been clear")
 
     application = ApplicationBuilder().token(BOT_TOKEN).build()
 

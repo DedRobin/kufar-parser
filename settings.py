@@ -9,7 +9,7 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
 DAYS_AGO = 1
 
 # Cache limit
-LIMIT_OF_RECORDS = 100
+LIMIT_OF_RECORDS = 500
 
 # Logger
 logger = logging.getLogger(__name__)
