@@ -5,13 +5,10 @@
 ## Instruction (for Windows)
 
 1. Copy repository in some directory;
-2. Install [Python v3.9.16](https://www.python.org/downloads/release/python-3916/) for Windows or for Linux:
+2. Install [Python v3.9](https://www.python.org/downloads/) for Windows or for Linux:
 
    ````
-   sudo add-apt-repository ppa:deadsnakes/ppa
-   ````
-
-   ````
+   sudo add-apt-repository ppa:deadsnakes/ppa &&
    sudo apt install python3.9
    ````
 
