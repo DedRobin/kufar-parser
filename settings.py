@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 # URL and Token
 URL = "https://www.kufar.by/l/r~minsk/noutbuki/nb~apple?cmp=0&cnd=1&sort=lst.d"

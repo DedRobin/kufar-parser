@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
@@ -7,11 +8,12 @@ from parsers.services import (
     get_cache,
     get_page,
     get_post_date,
+    get_product_id,
     get_product_image,
     get_product_link,
     get_product_name,
     get_product_price,
-    check_cache_size,
+    save_cache,
 )
 
 
@@ -24,7 +26,7 @@ def parse_kufar(url: str) -> list:
     options.add_argument("--window-size=1920,1080")
 
     # Open browser
-    driver = webdriver.Chrome(executable_path="driver/chromedriver", options=options)
+    driver = webdriver.Chrome(options=options)
     driver.get(url=url)
 
     # Click button "Принять"
@@ -42,30 +44,40 @@ def parse_kufar(url: str) -> list:
         names, prices, links, images, dates = [], [], [], [], []
 
         for product in products_from_page:
-            date = get_post_date(product)
-            if not date:
-                product_list = list(zip(links, names, prices, dates, images))
-                if product_list:
-                    products.append(product_list)
-                # Closing the browser
-                driver.close()
-                driver.quit()
-                check_cache_size()
-                return products
+            try:
+                product.find_element(By.TAG_NAME, "object")
+            except NoSuchElementException:
+                date = get_post_date(product)
+                if not date:
+                    product_list = list(zip(links, names, prices, dates, images))
+                    if product_list:
+                        products.append(product_list)
+                    # Closing the browser
+                    driver.close()
+                    driver.quit()
+                    save_cache(cache)
+                    return products
 
-            link = get_product_link(product)
-            is_existed = check_in_cache(cache, link)  # Checking a file in the cache
-            if is_existed:
+                link = get_product_link(product)
+                product_id = get_product_id(link)
+                is_existed = check_in_cache(
+                    cache, product_id
+                )  # Checking a file in the cache
+                if is_existed:
+                    continue
+                else:
+                    cache.append(product_id)
+                name = get_product_name(product)
+                price = get_product_price(product)
+                src_image = get_product_image(product)
+
+                dates.append(date)
+                links.append(link)
+                names.append(name)
+                prices.append(price)
+                images.append(src_image)
+            else:
                 continue
-            name = get_product_name(product)
-            price = get_product_price(product)
-            src_image = get_product_image(product)
-
-            dates.append(date)
-            links.append(link)
-            names.append(name)
-            prices.append(price)
-            images.append(src_image)
 
         product_list = list(zip(links, names, prices, dates, images))
         if product_list:
@@ -85,5 +97,5 @@ def parse_kufar(url: str) -> list:
     # Closing the browser
     driver.close()
     driver.quit()
-    check_cache_size()
+    save_cache(cache)
     return products

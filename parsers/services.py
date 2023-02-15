@@ -1,4 +1,3 @@
-import csv
 import re
 from datetime import datetime, timedelta
 
@@ -93,41 +92,34 @@ def _convert_datetime(input_datetime: str) -> str or None:
 
 def get_cache() -> list:
     try:
-        open("cache.csv", "r")
+        open("cache.txt", "r")
     except FileNotFoundError:
-        cache = open("cache.csv", "w")
+        cache = open("cache.txt", "w")
         cache.close()
-    cache = open("cache.csv", "r")
-    reader = csv.reader(cache)
-    data = [row[0] for row in reader]
+    cache = open("cache.txt", "r").read()
+    if not cache:
+        return []
+    data = cache.split("\n")
     return data
 
 
-def check_in_cache(cache: list, link: str) -> bool:
-    product_id = _get_product_id(link)
+def check_in_cache(cache: list, product_id: str) -> bool:
     if product_id not in cache:
-        with open("cache.csv", "a") as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow([product_id])
-            return False
+        return False
     return True
 
 
-def _get_product_id(link: str):
+def get_product_id(link: str) -> str:
     match = re.findall(r"/[0-9]+\?", link)
     if match:
         link = match[0][1:-1]
         return link
 
 
-def check_cache_size():
-    with open("cache.csv", "r") as cache:
-        reader = csv.reader(cache)
-        data = [row[0] for row in reader]
-        size = len(data)
+def save_cache(cache: list) -> None:
+    size = len(cache)
     if size > LIMIT_OF_RECORDS:
-        with open("cache.csv", "w") as cache:
-            writer = csv.writer(cache)
-            data = data[:LIMIT_OF_RECORDS]
-            for row in data:
-                writer.writerow([row])
+        from_index = size - LIMIT_OF_RECORDS
+        cache = cache[from_index:]
+    with open("cache.txt", "w") as file:
+        file.write("\n".join(cache))

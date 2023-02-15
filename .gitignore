@@ -1,5 +1,4 @@
 .idea
 .env
 kufar-parser-venv
-driver
-cache.csv
+cache.txt
