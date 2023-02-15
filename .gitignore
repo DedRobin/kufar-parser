@@ -1,4 +1,5 @@
 .idea
 .env
+__pycache__
 kufar-parser-venv
 cache.txt
