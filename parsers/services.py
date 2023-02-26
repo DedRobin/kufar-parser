@@ -30,27 +30,27 @@ def get_page(driver: WebDriver):
 
 
 def get_product_name(product: WebElement) -> str:
-    name = product.find_element(By.CLASS_NAME, "styles_title__XS_QS")
+    name = product.find_element(By.TAG_NAME, "h3")
     name = name.text
     return name
 
 
 def get_product_price(product: WebElement) -> str:
-    price = product.find_element(By.CLASS_NAME, "styles_price__tiO8k")
-    price = price.find_element(By.TAG_NAME, "span")
+    # price = product.find_element(By.TAG_NAME, "styles_price__")
+    price = product.find_elements(By.TAG_NAME, "span")[0]
     price = price.text
     return price
 
 
 def get_product_link(product: WebElement) -> str:
-    link = product.find_element(By.CLASS_NAME, "styles_wrapper__IMYdY")
+    link = product.find_element(By.TAG_NAME, "a")
     link = link.get_attribute("href")
     return link
 
 
 def get_product_image(product: WebElement) -> str:
     try:
-        image = product.find_element(By.CLASS_NAME, "styles_image__CTXvl")
+        image = product.find_element(By.TAG_NAME, "img")
         src = image.get_attribute("data-src")
     except NoSuchElementException:
         src = "static/images/no-image.jpg"
@@ -58,8 +58,9 @@ def get_product_image(product: WebElement) -> str:
 
 
 def get_post_date(product: WebElement) -> str:
-    date = product.find_element(By.CLASS_NAME, "styles_secondary__dylmH")
-    date = date.find_element(By.TAG_NAME, "span")
+    # date = product.find_element(By.CLASS_NAME, "styles_secondary__dylmH")
+    # date = product.find_element(By.CLASS_NAME, "styles_secondary__")
+    date = product.find_elements(By.TAG_NAME, "span")[2]
     date = date.text
     date = _convert_datetime(date)
     return date
