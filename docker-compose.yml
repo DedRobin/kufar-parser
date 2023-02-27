@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+
+
+  parser:
+    image: dedrobin/kufar-parser:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app/
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+    command: |
+      python run_app.py
