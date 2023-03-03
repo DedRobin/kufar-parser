@@ -1,7 +1,9 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 
 from parsers.services import (
     check_in_cache,
@@ -29,7 +31,9 @@ def parse_kufar(url: str) -> list:
     options.add_argument('--disable-dev-shm-usage')
 
     # Open browser
-    driver = webdriver.Chrome(options=options)
+    service = ChromeService(executable_path=ChromeDriverManager().install())
+
+    driver = webdriver.Chrome(service=service, options=options)
     driver.get(url=url)
 
     # Click button "Принять"
