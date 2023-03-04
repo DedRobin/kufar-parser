@@ -1,11 +1,12 @@
+import os
 import psycopg2
 
 connection = psycopg2.connect(
-    database="kufar_parser",
-    user="dedrobin",
-    password="dedrobin",
-    host="127.0.0.1",
-    port="5432"
+    database=os.environ.get("DATABASE_NAME"),
+    user=os.environ.get("DB_USER"),
+    password=os.environ.get("DB_PASSWORD"),
+    host=os.environ.get("DB_HOST"),
+    port=os.environ.get("DB_PORT"),
 )
 cursor = connection.cursor()
 try:
@@ -17,7 +18,8 @@ try:
     );
         """
     )
+    connection.commit()
 except:
     print("Table exists")
 
-connection.commit()
+
