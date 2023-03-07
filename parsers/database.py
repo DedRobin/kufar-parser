@@ -30,7 +30,5 @@ CREATE TABLE chat_ids
         """
     )
     connection.commit()
-except:
-    print("Table exists")
-
-
+except psycopg2.errors.DuplicateTable:
+    print("The table is already exists")
