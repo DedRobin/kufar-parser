@@ -51,7 +51,9 @@ def get_product_link(product: WebElement) -> str:
 def get_product_image(product: WebElement) -> str:
     try:
         image = product.find_element(By.TAG_NAME, "img")
-        src = image.get_attribute("data-src")
+        src = image.get_attribute("data-src") or image.get_attribute("src")
+        if not src:
+            src = "static/images/no-image.jpg"
     except NoSuchElementException:
         src = "static/images/no-image.jpg"
     return src
