@@ -92,7 +92,7 @@ def parse_kufar(url: str) -> list:
 
         # Get next page
         next_page = driver.find_elements(
-            By.CLASS_NAME, "styles_link__KajLs.styles_arrow__fJMcy"
+            By.CLASS_NAME, "styles_links__inner__g3xjS"
         )
         last_child = next_page[-1]
         if last_child.tag_name != "a":
