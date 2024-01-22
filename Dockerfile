@@ -8,6 +8,7 @@ RUN apt-get update && \
     apt-get install -y google-chrome-stable
 
 COPY requirements_dep.txt requirements.txt
+COPY . /app
 
 RUN pip install --trusted-host pypi.org --no-cache-dir --upgrade pip && \
     pip install --trusted-host pypi.org --no-cache-dir -r requirements.txt
